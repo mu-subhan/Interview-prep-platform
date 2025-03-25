@@ -1,4 +1,4 @@
-/* @import "tailwindcss";
+@import "tailwindcss";
 @import "tw-animate-css";
 
 @plugin "tailwindcss-animate";
@@ -332,4 +332,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-} */
+}
