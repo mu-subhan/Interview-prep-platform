@@ -4,45 +4,46 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {Form, FormField} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import FormField from "./FormField";
 
-const AuthFormSchema = (type:FormType)  => {
-    return z.object({
-        name:type === "sign-up" ? z.string().min(3) : z.string().optional(),
-        email:z.string().email(),
-        password:z.string().min(8)
-    })  
-}
+const AuthFormSchema = (type: FormType) => {
+  return z.object({
+    name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
+    email: z.string().email(),
+    password: z.string().min(8),
+  });
+};
 const AuthForm = ({ type }: { type: FormType }) => {
-    const formSchema = AuthFormSchema(type);
+  const router = useRouter();
+  const formSchema = AuthFormSchema(type);
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-        name: "",
-        email: "",
-        password: "",
+      name: "",
+      email: "",
+      password: "",
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-        if(type === 'sign-up'){
-           console.log('sign UP',values);
-           toast.success("Account created successfully");
-        }
-        else{
-            console.log("SIGN IN",values);
-            toast.success("Signed in successfully")
-        }
+      if (type === "sign-up") {
+        toast.success("Account created successfully. Please sign in");
+        router.push("/sign-in");
+      } else {
+        toast.success("Signed in successfully");
+        router.push("/");
+      }
     } catch (error) {
-        console.log(error);
-        toast.error(`There was an error: ${error}`);
-        
+      console.log(error);
+      toast.error(`There was an error: ${error}`);
     }
   }
 
@@ -62,11 +63,28 @@ const AuthForm = ({ type }: { type: FormType }) => {
             className="w-full space-y-6 mt-4 form"
           >
             {!isSignIn && (
-<FormField control={form.control} name="name" label="Name" placeholder="Your Name" />
-)}
-<FormField control={form.control} name="email" label="Email" placeholder="Your Email Address" type="email" />
+              <FormField
+                control={form.control}
+                name="name"
+                label="Name"
+                placeholder="Your Name"
+              />
+            )}
+            <FormField
+              control={form.control}
+              name="email"
+              label="Email"
+              placeholder="Your Email Address"
+              type="email"
+            />
 
-<FormField control={form.control} name="password" label="Password" placeholder="Enter Password" type="password" />
+            <FormField
+              control={form.control}
+              name="password"
+              label="Password"
+              placeholder="Enter Password"
+              type="password"
+            />
 
             <Button type="submit" className="btn">
               {isSignIn ? "Sign in" : "Create an Account"}
