@@ -10,7 +10,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import FormField from "./FormField";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase/client";
 import { signUp } from "@/lib/actions/auth.action";
 
@@ -59,6 +59,20 @@ const AuthForm = ({ type }: { type: FormType }) => {
         toast.success("Account created successfully. Please sign in");
         router.push("/sign-in");
       } else {
+        const {email,password} = values;
+        const userCredentials = await signInWithEmailAndPassword(auth,email,password);
+
+      const idToken = await userCredentials.user.getIdToken();
+
+      if(!idToken){
+        toast.error("An error occurred while signing in");
+        return;
+      }
+      await signIn({
+        email,
+        idToken
+      });
+
         toast.success("Signed in successfully");
         router.push("/");
       }
