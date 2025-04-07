@@ -18,9 +18,13 @@ export async function signUp(params:SignUpParams){
                 message:"User already exits. Please sign in instead"
             }
         }
-        await db.collection('user').doc(uid).set({
-            name,email;
+        await db.collection('users').doc(uid).set({
+            name,email
         })
+        return {
+            success:true,
+            message:"User created successfully,Please Sign in"
+        }
     } catch (e:any) {
         console.error('Error creating a user',e);
         
