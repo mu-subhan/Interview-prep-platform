@@ -6,7 +6,8 @@ import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-//  Firebase configuration
+
+// updated firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAL5sWDz3Gb2wa87SjJAkKMnlwFb8ZeZ8U",
   authDomain: "interview-prepwise-772e6.firebaseapp.com",
